@@ -1,9 +1,38 @@
 find_package(Catch2 REQUIRED)
 
 # Set up warnings / similar flags
-set(MSVC_flags /permissive-)
-set(Clang_flags -Wall -Wextra -Wpedantic)
-set(GNU_flags -Wall -Wextra -Wpedantic)
+set(werr ${<PROJECT>_WARNINGS_AS_ERRORS})
+set(compile_options)
+set(link_options)
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL MSVC)
+  list(APPEND compile_options
+    /permissive- /W4
+    $<$<BOOL:${werr}>:/WX>
+  )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL GNU)
+  list(APPEND compile_options
+    -Wall -Wextra -Wpedantic
+    -fsanitize=address
+    -fsanitize=undefined
+    $<$<BOOL:${werr}>:-Werror>
+  )
+  list(APPEND link_options
+    -fsanitize=address
+    -fsanitize=undefined
+  )
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL Clang)
+  list(APPEND compile_options
+    -Wall -Wextra -Wpedantic
+    -fsanitize=address
+    -fsanitize=undefined
+    $<$<BOOL:${werr}>:-Werror>
+  )
+  list(APPEND link_options
+    -fsanitize=address
+    -fsanitize=undefined
+  )
+endif()
 
 file(GLOB_RECURSE test_sources CONFIGURE_DEPENDS "*.test.cpp")
 
@@ -15,7 +44,11 @@ target_link_libraries(test.<Project>
 )
 target_compile_options(test.<Project>
   PRIVATE
-    ${${CMAKE_CXX_COMPILER_ID}_flags}
+    ${compile_options}
+)
+target_link_options(test.<Project>
+  PRIVATE
+    ${link_options}
 )
 target_compile_features(test.<Project>
   PRIVATE
