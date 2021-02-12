@@ -30,5 +30,5 @@ pretending your project is named "Proj":
 $ find . -type f \( ! -path './.git/*' \) -exec sed -Ei 's/<Project>/Proj/g' \{\} \;
 $ find . -type f \( ! -path './.git/*' \) -exec sed -Ei 's/<project>/proj/g' \{\} \;
 $ find . -type f \( ! -path './.git/*' \) -exec sed -Ei 's/<PROJECT>/PROJ/g' \{\} \;
-$ find . \( ! -path './.git/*' \) -name '<Project>*' -exec bash -c "(echo '{}' | sed -E 'p;s/<Project>/Chef/g' | xargs -L2 mv)" \;
+$ find . \( ! -path './.git/*' \) -name '<Project>*' -exec bash -c "(echo '{}' | sed -E 'p;s/<Project>/Proj/g' | xargs -L2 mv)" \;
 ```
