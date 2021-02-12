@@ -17,6 +17,7 @@ option(BUILD_TESTING "Enable testing" ${<PROJECT>_DEVELOPER_DEFAULTS})
 option(<PROJECT>_BUILD_DOCS "Build the documentation" OFF)
 option(<PROJECT>_TEST_COLOR "Force test color" OFF)
 option(<PROJECT>_WARNINGS_AS_ERRORS "Turn on -Werror or equivalent" OFF)
+option(<PROJECT>_DEVELOPMENT_SANITIZERS "Turn on sanitizers" ${<PROJECT>_DEVELOPER_DEFAULTS})
 
 if(BUILD_TESTING)
   enable_testing()
@@ -26,6 +27,18 @@ if(<PROJECT>_DEVELOPER_DEFAULTS)
   include(pmm.cmake)
   pmm(CONAN)
 endif()
+
+if(<PROJECT>_DEVELOPMENT_SANITIZERS)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL Clang OR CMAKE_CXX_COMPILER_ID STREQUAL GCC)
+    add_compile_options(-fsanitize=address -fsanitize=memory)
+    add_link_options(-fsanitize=address -fsanitize=memory)
+  endif()
+endif()
+
+include(<Project>Flags)
+<project>_add_warnings_target(<Project>::Warnings
+  WERR ${<PROJECT>_WARNINGS_AS_ERRORS}
+)
 
 # Header only library. Changes needed for non-header-only
 add_library(<Project> INTERFACE)
