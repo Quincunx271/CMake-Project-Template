@@ -40,18 +40,7 @@ include(<Project>Flags)
   WERR ${<PROJECT>_WARNINGS_AS_ERRORS}
 )
 
-# Header only library. Changes needed for non-header-only
-add_library(<Project> INTERFACE)
-add_library(<Project>::<Project> ALIAS <Project>)
-target_include_directories(<Project>
-  INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
-)
-target_compile_features(<Project>
-  INTERFACE
-    cxx_std_14
-)
+add_subdirectory(src)
 
 # Docs
 if(<PROJECT>_BUILD_DOCS)
