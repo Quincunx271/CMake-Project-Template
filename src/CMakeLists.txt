@@ -1,4 +1,4 @@
-file(GLOB_RECURSE sources "Project/*.hpp" "Project/*.cpp")
+file(GLOB_RECURSE sources "<Project>/*.hpp" "<Project>/*.cpp")
 
 add_library(<Project> ${sources})
 add_library(<Project>::<Project> ALIAS <Project>)
